@@ -1,10 +1,7 @@
 package org.kylej.gqldatafetcher.generated.client;
 
 import com.netflix.graphql.dgs.client.codegen.BaseSubProjectionNode;
-import jakarta.annotation.Generated;
 
-@Generated("com.netflix.graphql.dgs.codegen.CodeGen")
-@org.kylej.gqldatafetcher.generated.Generated
 public class SearchProjectionRoot<PARENT extends BaseSubProjectionNode<?, ?>, ROOT extends BaseSubProjectionNode<?, ?>> extends BaseSubProjectionNode<PARENT, ROOT> {
   public SearchProjectionRoot() {
     super(null, null, java.util.Optional.of("SearchResult"));

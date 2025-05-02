@@ -32,5 +32,6 @@ class SearchController(private val entityManager: EntityManager) {
           title = tuple.get(qPost.title),
           content = tuple.get(qPost.content))
     }
+    return listOf()
   }
 }

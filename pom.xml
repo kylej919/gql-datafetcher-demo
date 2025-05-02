@@ -172,7 +172,7 @@
                             <sourceDirs>
                                 <sourceDir>src/test/kotlin</sourceDir>
                                 <sourceDir>src/test/java</sourceDir>
-                                <sourceDir>target/generated-sources/kapt/test</sourceDir>
+                                <sourceDir>target/generated-sources/kapt/main</sourceDir>
                             </sourceDirs>
                         </configuration>
                     </execution>
@@ -212,6 +212,7 @@
                         <configuration>
                             <sources>
                                 <source>target/generated-sources/annotations</source>
+                                <source>target/generated-sources/kapt/main</source>
                             </sources>
                         </configuration>
                     </execution>

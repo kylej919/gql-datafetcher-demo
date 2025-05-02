@@ -6,7 +6,15 @@ spring:
     username: postgres
   jpa:
     hibernate:
-      ddl-auto: update # makes schema changes to the DB to match hibernate entities
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate.hibernate.format_sql: true
   graphql:
     graphiql:
       enabled: true
+
+logging:
+  level:
+    org.hibernate.sql: debug
+    org.hibernate.type: trace

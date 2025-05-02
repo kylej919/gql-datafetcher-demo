@@ -3,8 +3,8 @@ package org.kylej.gqldatafetcher.controller
 import java.util.*
 import kotlin.test.Test
 import org.assertj.core.api.Assertions.assertThat
-import org.kylej.gqldatafetcher.generated.types.SearchResult
 import org.kylej.gqldatafetcher.model.Post
+import org.kylej.gqldatafetcher.model.SearchResult
 import org.kylej.gqldatafetcher.repository.PostRepository
 import org.kylej.gqldatafetcher.util.GraphQLSender
 import org.springframework.beans.factory.annotation.Autowired
@@ -19,7 +19,7 @@ class SearchControllerIT {
 
   @Autowired private lateinit var postRepository: PostRepository
 
-  val query =
+  val fullQuery =
       """
         query Search {
             search {
@@ -45,14 +45,48 @@ class SearchControllerIT {
         }
     """
 
+  val partialQuery =
+      """
+        query Search {
+            search {
+                ... on Post {
+                    __typename
+                    title
+                }
+                ... on Comment {
+                    __typename
+                    text
+                }
+                ... on User {
+                    __typename
+                    username
+                }
+            }
+        }
+    """
+
   @Test
   fun testSearch() {
-    postRepository.save(
-        Post(id = UUID.randomUUID(), title = "Test Post", content = "This is a test post."))
+    //      val qPost = QPost.post
+    postRepository.save(Post(title = "Test Post", content = "This is a test post."))
 
     val result =
         graphQLSender.query(
-            queryRequest = query,
+            queryRequest = fullQuery,
+            responseClass = Array<SearchResult>::class.java,
+            responsePath = "data.search")
+
+    assertThat(result).isNotNull
+  }
+
+  @Test
+  fun testSearchPartial() {
+    //      val qPost = QPost.post
+    postRepository.save(Post(title = "Test Post", content = "This is a test post."))
+
+    val result =
+        graphQLSender.query(
+            queryRequest = partialQuery,
             responseClass = Array<SearchResult>::class.java,
             responsePath = "data.search")
 

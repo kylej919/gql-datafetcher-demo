@@ -3,6 +3,7 @@ package org.kylej.gqldatafetcher
 import graphql.schema.DataFetcher
 import org.kylej.gqldatafetcher.model.Comment
 import org.kylej.gqldatafetcher.model.Post
+import org.kylej.gqldatafetcher.model.SearchResult
 import org.kylej.gqldatafetcher.model.User
 import org.kylej.gqldatafetcher.repository.CommentRepository
 import org.kylej.gqldatafetcher.repository.PostRepository
@@ -35,7 +36,7 @@ class GraphQLConfig {
       userDataFetcher: DataFetcher<Iterable<User>>,
       postDataFetcher: DataFetcher<Iterable<Post>>,
       commentDataFetcher: DataFetcher<Iterable<Comment>>
-  ): DataFetcher<Iterable<Any>> {
+  ): DataFetcher<Iterable<SearchResult>> {
     return DataFetcher { env ->
       val users = userDataFetcher[env]
       val posts = postDataFetcher[env]
@@ -46,14 +47,14 @@ class GraphQLConfig {
 
   @Bean
   fun runtimeWiringConfigurer(
-      searchResultsDataFetcher: DataFetcher<Iterable<Any>>
+      searchResultsDataFetcher: DataFetcher<Iterable<SearchResult>>
   ): RuntimeWiringConfigurer {
     return RuntimeWiringConfigurer { wiring ->
       wiring
           .type("Query") { type -> type.dataFetcher("search", searchResultsDataFetcher) }
           .type("SearchResult") { type ->
             type.typeResolver { env ->
-              val searchResult = env.getObject<Any>()
+              val searchResult = env.getObject<SearchResult>()
               when (searchResult) {
                 is User -> env.schema.getObjectType("User")
                 is Post -> env.schema.getObjectType("Post")
